@@ -87,6 +87,14 @@ function! isort#Isort(start_line, end_line, ...)
     " Start job
     let l:cmd = 'isort -'
     let l:isort_options = get(g:, 'isort_vim_options', '')
+    let l:src_pipenv = get(g:, 'isort_vim_src_pipenv', '')
+    if l:src_pipenv != ''
+        let l:venv_root = system('pipenv --where')
+        if l:venv_root[0] == '/'
+            let l:venv_root = substitute(l:venv_root, '\n', '', '')
+            let l:isort_options .= ' --src ' . l:venv_root . l:src_pipenv
+        endif
+    endif
     if l:isort_options != ''
         let l:cmd .= ' ' . l:isort_options
     endif
